@@ -6,17 +6,18 @@ from scipy.stats import linregress
 from scipy.optimize import curve_fit
 import string
 import re
-import matplotlib.pyplot as plt
-import matplotlib.gridspec as gridspec
-import matplotlib as mpl
 
-
-def data_processing(file, platemap_plot=False,endremove=5):
+def data_processing(file, platemap_plot=False,endremove=2,
+	start_row = 2, start_col = 'B'):
 	# read data
 	df_in = pd.read_table(file, skiprows=[0,1], 
 		index_col = 1, header=0)
 	# detect shape of the dataframe
 	plate_cols = df_in.columns.tolist()
+	# if the input data has been broken down to individual images, exit the script
+	if 'Image' in plate_cols[0]:
+		print('Input dataframe not supported')
+		exit()
 	p = re.compile(r'[A-Z]+\d+')
 	columns_valid = [s for s in plate_cols if p.match(s)]
 	shape_x = int(re.findall(r'\d+',columns_valid[-1])[0]) - int(re.findall(r'\d+',columns_valid[0])[0]) + 1
@@ -30,6 +31,9 @@ def data_processing(file, platemap_plot=False,endremove=5):
 	columns = ['DIP','intercept','r_value','p_value']
 	df_in_DIP = pd.DataFrame(index=df_in.columns, columns=columns)
 	if platemap_plot is True:
+		import matplotlib.pyplot as plt
+		import matplotlib.gridspec as gridspec
+		import matplotlib as mpl
 		figure = plt.figure(figsize=(shape_x*0.6, shape_y*0.6))
 		gs = gridspec.GridSpec(shape_y, shape_x)
 		
@@ -75,8 +79,8 @@ def data_processing(file, platemap_plot=False,endremove=5):
 	# Out DIP for each well into a heatmap
 	plate_df_out = pd.DataFrame(df_in_DIP.DIP.values.reshape((shape_x,shape_y)))
 	plate_df_out = plate_df_out.T
-	plate_df_out.index = list(string.ascii_uppercase[1:shape_y+1])
-	plate_df_out.columns = range(2,shape_x+2)
+	plate_df_out.index = list(string.ascii_uppercase[ord(start_col)-65:shape_y+ord(start_col)-65])
+	plate_df_out.columns = range(start_row,shape_x+start_row)
 	# plate_df_out.to_csv('temp.csv', header=True, index=True)
 	# plate_df_out = pd.read_csv('temp.csv',header=0,index_col=0)
 	# os.remove('temp.csv')
