@@ -65,7 +65,7 @@ def data_processing(file, platemap_plot=False,endremove=2,
 		DIP_list = find_DIP(df_in.index.tolist(), df_in[column].tolist())
 		if platemap_plot is True:
 			axes = plt.subplot(gs[a,b])
-			axes.plot(df_in.index.tolist(), df_in[column].tolist(),
+			axes.scatter(df_in.index.tolist(), df_in[column].tolist(),
 				s=1.5,marker='x')
 			axes.plot(
 				(0,df_in.index.tolist()[-1]),
