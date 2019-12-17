@@ -65,10 +65,12 @@ def data_processing(file, platemap_plot=False,endremove=2,
 		DIP_list = find_DIP(df_in.index.tolist(), df_in[column].tolist())
 		if platemap_plot is True:
 			axes = plt.subplot(gs[a,b])
-			axes.plot(df_in.index.tolist(), df_in[column].tolist())
+			axes.plot(df_in.index.tolist(), df_in[column].tolist(),
+				s=1.5,marker='x')
 			axes.plot(
 				(0,df_in.index.tolist()[-1]),
-				(DIP_list[1],df_in.index.tolist()[-1]*DIP_list[0]+DIP_list[1]),alpha=0.5
+				(DIP_list[1],df_in.index.tolist()[-1]*DIP_list[0]+DIP_list[1]),
+				color='r',alpha=0.8
 				)
 			axes.set_ylim(-2,8)
 			axes.set_xticks([], [])
