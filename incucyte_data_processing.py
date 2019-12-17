@@ -68,7 +68,7 @@ def data_processing(file, platemap_plot=False,endremove=2,
 			axes.plot(df_in.index.tolist(), df_in[column].tolist())
 			axes.plot(
 				(0,df_in.index.tolist()[-1]),
-				(DIP_list[1],df_in.index.tolist()[-1]*DIP_list[0]+DIP_list[1])
+				(DIP_list[1],df_in.index.tolist()[-1]*DIP_list[0]+DIP_list[1]),alpha=0.5
 				)
 			axes.set_ylim(-2,8)
 			axes.set_xticks([], [])
